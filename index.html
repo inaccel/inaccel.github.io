@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+    <title>InAccel repository | quick & easy setup</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <header class="page-header">
+      <h1 class="project-name">InAccel repository</h1>
+      <h2 class="project-tagline">quick & easy setup via:</h2>
+
+      <button data-clipboard-text="curl -sS https://setup.inaccel.com/repo | sh" class="btn">
+        <tt>curl -sS https://setup.inaccel.com/repo | sh</tt>
+      </button>
+    </header>
+    <script src="https://unpkg.com/popper.js@1"></script>
+    <script src="https://unpkg.com/tippy.js@5"></script>
+    <script>
+      var timeout;
+      tippy('.btn', {
+        content: 'Copy',
+        distance: 15,
+        hideOnClick: false,
+        multiple: true,
+        placement: 'bottom',
+        trigger: 'mouseenter',
+        onTrigger(instance) {
+          tippy.hideAll();
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            instance.hide();
+          }, 2000);
+        }
+      });
+      tippy('.btn', {
+        content: 'Copied to clipboard',
+        distance: 15,
+        hideOnClick: false,
+        multiple: true,
+        placement: 'bottom',
+        trigger: 'click',
+        onTrigger(instance) {
+          tippy.hideAll();
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            instance.hide();
+          }, 2000);
+        }
+      });
+    </script>
+    <script src="https://unpkg.com/clipboard@2"></script>
+    <script>
+      new ClipboardJS('.btn');
+    </script>
+  </body>
+</html>
