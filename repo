@@ -119,7 +119,7 @@ do_setup() {
 			if ! command -v gpg > /dev/null; then
 				pre_reqs="$pre_reqs gnupg"
 			fi
-			apt_repo="deb $DOWNLOAD_URL/debian /"
+			apt_repo="deb [arch=amd64] $DOWNLOAD_URL/debian /"
 			(
 				set -x
 				$sh_c 'apt-get update -qq >/dev/null'
