@@ -14,8 +14,29 @@ if [ -z "$REPO_FILE" ]; then
 	REPO_FILE="$DEFAULT_REPO_FILE"
 fi
 
+install=${install:-}
+while [ $# -gt 0 ]; do
+	case "$1" in
+		install)
+			install=1
+			;;
+		*)
+			echo "Illegal option $1"
+			;;
+	esac
+	shift $(( $# > 0 ? 1 : 0 ))
+done
+
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
+}
+
+is_install() {
+	if [ -z "$install" ]; then
+		return 1
+	else
+		return 0
+	fi
 }
 
 get_distribution() {
@@ -107,6 +128,12 @@ do_setup() {
 				$sh_c "echo \"$apt_repo\" > /etc/apt/sources.list.d/inaccel.list"
 				$sh_c 'apt-get update -qq >/dev/null'
 			)
+			(
+				if is_install; then
+					set -x
+					$sh_c 'apt-get install -y -qq --no-install-recommends inaccel >/dev/null'
+				fi
+			)
 			exit 0
 			;;
 		amzn|centos|fedora|rhel)
@@ -130,6 +157,12 @@ do_setup() {
 				$sh_c "$config_manager --add-repo $yum_repo"
 
 				$sh_c "$pkg_manager makecache"
+			)
+			(
+				if is_install; then
+					set -x
+					$sh_c "$pkg_manager install -y -q inaccel"
+				fi
 			)
 			exit 0
 			;;
