@@ -1,0 +1,6 @@
+[inaccel]
+name=InAccel Packages
+baseurl=https://dl.cloudsmith.io/public/inaccel/stable/rpm/any-distro/any-version/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://setup.inaccel.com/gpg
