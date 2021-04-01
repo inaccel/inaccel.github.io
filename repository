@@ -172,7 +172,7 @@ do_setup() {
 			(
 				if is_install; then
 					set -x
-					$sh_c 'apt-get install -y -qq --no-install-recommends inaccel inaccel-cli inaccel-fpga >/dev/null'
+					$sh_c 'apt-get install -y -qq --no-install-recommends inaccel inaccel-cli inaccel-docker inaccel-fpga >/dev/null'
 				fi
 			)
 			exit 0
@@ -202,7 +202,7 @@ do_setup() {
 			(
 				if is_install; then
 					set -x
-					$sh_c "$pkg_manager install -y -q inaccel inaccel-cli inaccel-fpga"
+					$sh_c "$pkg_manager install -y -q inaccel inaccel-cli inaccel-docker inaccel-fpga"
 				fi
 			)
 			exit 0
