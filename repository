@@ -82,13 +82,16 @@ check_forked() {
 				lsb_dist=debian
 				dist_version="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
 				case "$dist_version" in
+					11)
+						dist_version="bullseye"
+					;;
 					10)
 						dist_version="buster"
 					;;
 					9)
 						dist_version="stretch"
 					;;
-					8|'Kali Linux 2')
+					8)
 						dist_version="jessie"
 					;;
 				esac
@@ -126,6 +129,9 @@ do_setup() {
 		debian)
 			dist_version="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
 			case "$dist_version" in
+				11)
+					dist_version="bullseye"
+				;;
 				10)
 					dist_version="buster"
 				;;
@@ -156,23 +162,22 @@ do_setup() {
 	case "$lsb_dist" in
 		debian|ubuntu)
 			pre_reqs="apt-transport-https ca-certificates curl"
-
 			if ! command -v gpg > /dev/null; then
 				pre_reqs="$pre_reqs gnupg"
 			fi
-			apt_repo="deb [arch=$(dpkg --print-architecture)] $DOWNLOAD_URL/deb/$lsb_dist $dist_version main"
+			apt_repo="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/inaccel-archive-keyring.gpg] $DOWNLOAD_URL/deb/$lsb_dist $dist_version main"
 			(
 				set -x
 				$sh_c 'apt-get update -qq >/dev/null'
 				$sh_c "DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $pre_reqs >/dev/null"
-				$sh_c "curl -fsSL \"$SETUP_URL/gpg\" | apt-key add -qq - >/dev/null"
+				$sh_c "curl -fsSL \"$SETUP_URL/gpg\" | gpg --dearmor --yes -o /usr/share/keyrings/inaccel-archive-keyring.gpg"
 				$sh_c "echo \"$apt_repo\" > /etc/apt/sources.list.d/inaccel.list"
 				$sh_c 'apt-get update -qq >/dev/null'
 			)
 			(
 				if is_install; then
 					set -x
-					$sh_c 'apt-get install -y -qq --no-install-recommends inaccel inaccel-cli inaccel-docker inaccel-fpga >/dev/null'
+					$sh_c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends inaccel inaccel-cli inaccel-docker inaccel-fpga >/dev/null'
 				fi
 			)
 			exit 0
