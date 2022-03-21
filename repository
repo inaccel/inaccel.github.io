@@ -171,6 +171,7 @@ do_setup() {
 				$sh_c 'apt-get update -qq >/dev/null'
 				$sh_c "DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $pre_reqs >/dev/null"
 				$sh_c "curl -fsSL \"$SETUP_URL/gpg\" | gpg --dearmor --yes -o /usr/share/keyrings/inaccel-archive-keyring.gpg"
+				$sh_c "chmod a+r /usr/share/keyrings/inaccel-archive-keyring.gpg"
 				$sh_c "echo \"$apt_repo\" > /etc/apt/sources.list.d/inaccel.list"
 				$sh_c 'apt-get update -qq >/dev/null'
 			)
