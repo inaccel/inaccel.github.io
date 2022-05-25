@@ -165,13 +165,14 @@ do_setup() {
 			if ! command -v gpg > /dev/null; then
 				pre_reqs="$pre_reqs gnupg"
 			fi
-			apt_repo="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/inaccel-archive-keyring.gpg] $DOWNLOAD_URL/deb/$lsb_dist $dist_version main"
+			apt_repo="deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/inaccel.gpg] $DOWNLOAD_URL/deb/$lsb_dist $dist_version main"
 			(
 				set -x
 				$sh_c 'apt-get update -qq >/dev/null'
 				$sh_c "DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $pre_reqs >/dev/null"
-				$sh_c "curl -fsSL \"$SETUP_URL/gpg\" | gpg --dearmor --yes -o /usr/share/keyrings/inaccel-archive-keyring.gpg"
-				$sh_c "chmod a+r /usr/share/keyrings/inaccel-archive-keyring.gpg"
+				$sh_c 'mkdir -p /etc/apt/keyrings && chmod -R 0755 /etc/apt/keyrings'
+				$sh_c "curl -fsSL \"$SETUP_URL/gpg\" | gpg --dearmor --yes -o /etc/apt/keyrings/inaccel.gpg"
+				$sh_c "chmod a+r /etc/apt/keyrings/inaccel.gpg"
 				$sh_c "echo \"$apt_repo\" > /etc/apt/sources.list.d/inaccel.list"
 				$sh_c 'apt-get update -qq >/dev/null'
 			)
