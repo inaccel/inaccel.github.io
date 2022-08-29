@@ -185,11 +185,6 @@ do_setup() {
 			exit 0
 			;;
 		amzn|centos|fedora|rhel)
-			yum_repo="$SETUP_URL/inaccel.repo"
-			if ! curl -Ifs "$yum_repo" > /dev/null; then
-				echo "Error: Unable to curl repository file $yum_repo, is it valid?"
-				exit 1
-			fi
 			if [ "$lsb_dist" = "fedora" ]; then
 				pkg_manager="dnf"
 				config_manager="dnf config-manager"
@@ -199,10 +194,11 @@ do_setup() {
 				config_manager="yum-config-manager"
 				pre_reqs="yum-utils"
 			fi
+			repo_file_url="$SETUP_URL/inaccel.repo"
 			(
 				set -x
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
-				$sh_c "$config_manager --add-repo $yum_repo"
+				$sh_c "$config_manager --add-repo $repo_file_url"
 
 				$sh_c "$pkg_manager makecache"
 			)
