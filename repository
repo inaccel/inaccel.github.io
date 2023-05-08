@@ -1,8 +1,48 @@
 #!/bin/sh
 set -e
+# InAccel for Linux installation script.
+#
+# This script is intended as a convenient way to configure inaccel's package
+# repositories and to install InAccel, This script is not recommended for
+# production environments. Before running this script, make yourself familiar
+# with potential risks and limitations, and refer to the installation manual
+# at https://docs.inaccel.com/install/ for alternative installation methods.
+#
+# The script:
+#
+# - Requires `root` or `sudo` privileges to run.
+# - Attempts to detect your Linux distribution and version and configure your
+#   package management system for you.
+# - Doesn't allow you to customize most installation parameters.
+# - Installs dependencies and recommendations without asking for confirmation.
+# - Installs the latest stable release of InAccel, InAccel CLI, InAccel Docker,
+#   and InAccel FPGA. When using this script to provision a machine, this may
+#   result in unexpected major version upgrades of these packages. Always test
+#   upgrades in a test environment before deploying to your production systems.
+# - Isn't designed to upgrade an existing InAccel installation. When using the
+#   script to update an existing installation, dependencies may not be updated
+#   to the expected version, resulting in outdated versions.
+#
+# Usage
+# ==============================================================================
+#
+# To install the latest stable versions of InAccel, InAccel CLI, InAccel Docker,
+# InAccel FPGA, and their dependencies:
+#
+# 1. download the script
+#
+#   $ curl -fsSL https://setup.inaccel.com/repository -o setup-inaccel.sh
+#
+# 2. verify the script's content
+#
+#   $ cat setup-inaccel.sh
+#
+# 3. run the script either as root, or using sudo to perform the installation.
+#
+#   $ sudo sh setup-inaccel.sh install
+#
+# ==============================================================================
 
-# This script is meant for quick & easy setup via:
-#   $ curl -sS https://setup.inaccel.com/repository | sh
 
 DEFAULT_DOWNLOAD_URL="https://dl.cloudsmith.io/public/inaccel/stable"
 if [ -z "$DOWNLOAD_URL" ]; then
