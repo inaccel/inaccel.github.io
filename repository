@@ -228,7 +228,7 @@ do_setup() {
 			exit 0
 			;;
 		amzn|centos|fedora|rhel)
-			if [ "$lsb_dist" = "fedora" ]; then
+			if command_exists dnf; then
 				pkg_manager="dnf"
 				config_manager="dnf config-manager"
 				pre_reqs="dnf-plugins-core"
