@@ -230,17 +230,19 @@ do_setup() {
 		amzn|centos|fedora|rhel)
 			if command_exists dnf; then
 				pkg_manager="dnf"
+				pkg_manager_flags="--best"
 				config_manager="dnf config-manager"
 				pre_reqs="dnf-plugins-core"
 			else
 				pkg_manager="yum"
+				pkg_manager_flags=""
 				config_manager="yum-config-manager"
 				pre_reqs="yum-utils"
 			fi
 			repo_file_url="$SETUP_URL/inaccel.repo"
 			(
 				set -x
-				$sh_c "$pkg_manager install -y -q $pre_reqs"
+				$sh_c "$pkg_manager $pkg_manager_flags install -y -q $pre_reqs"
 				$sh_c "$config_manager --add-repo $repo_file_url"
 
 				$sh_c "$pkg_manager makecache"
@@ -248,7 +250,7 @@ do_setup() {
 			(
 				if is_install; then
 					set -x
-					$sh_c "$pkg_manager install -y -q inaccel inaccel-cli inaccel-docker inaccel-fpga"
+					$sh_c "$pkg_manager $pkg_manager_flags install -y -q inaccel inaccel-cli inaccel-docker inaccel-fpga"
 				fi
 			)
 			exit 0
